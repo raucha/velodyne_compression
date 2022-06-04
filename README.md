@@ -18,7 +18,7 @@ Not 100% same, but similar idea.
 
 Compression:  
  Start compression node  
-`rosrun compression compress2png`  
+`rosrun velodyne_compression compress2png`  
 Then play your file which should have /velodyne_packets topic:  
 `rosbag play yourfile.bag`  
 Compression node will compress packet data into a new topic /velodyne_packets_compressed  
@@ -28,8 +28,28 @@ to get the compressed data.
 
 Decompression:  
 Start decompression node  
-`rosrun compression recon2packet`  
+`rosrun velodyne_compression recon2packet`  
 Then play the compressed data which should have /CompressedPacket topic:  
 `rosbag play compresseddata.bag`  
 Then a reconstructed  /velodyne_packets will be built   
 
+## Evaluation
+```
+cd /workspaces/src
+catkin_init_ws
+cd /workspaces
+catkin_make
+wget https://hyko-proxy.uni-koblenz.de/hyko-dataset/HyKo1/raw-data/2016-06-29-14-38-44_3.bag
+rosrun velodyne_compression compress2png
+rosbag record /velodyne_packets_compressed -o png_compressed.bag -j
+rosbag record /velodyne_packets -o bz2_packet.bag -j
+rosbag record /velodyne_packets -o raw_packet.bag
+```
+
+## Result
+- Sensor: Velodyne-32E
+- Duration: 30secs
+
+| raw | bz2_compress(default func) | png_compress(this repo method) |
+| --- | --- | --- |
+| 63MByte | 35MByte | 25MByte |

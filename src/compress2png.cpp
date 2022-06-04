@@ -103,6 +103,9 @@ for (int j = 0, k = 0; j < SCANS_PER_BLOCK; j++, k += RAW_SCAN_SIZE) {
         union two_bytes tmp;
         tmp.bytes[0] = raw->blocks[i].data[k];
         tmp.bytes[1] = raw->blocks[i].data[k+1];
+        // 2022/06/04 15:47 追記
+        // 現在はDISTANCE_RESOLUTIONは外から設定するようになっている。hydro以降？
+        const float DISTANCE_RESOLUTION = 0.002f;
         float distance = tmp.uint*DISTANCE_RESOLUTION;
         int d=distance*100.0;
         //printf("get %d\n",d);
